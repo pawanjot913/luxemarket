@@ -1,0 +1,8 @@
+{
+  "name": "Remix: LuxeMarket",
+  "description": "A precision-engineered, high-end minimalist luxury fashion storefront with seamless product curation, favorites, and interactive cart.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

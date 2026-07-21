@@ -126,7 +126,7 @@ export default function ProductCard({
         </div>
 
         {/* Mobile action buttons (Mobile only) */}
-        <div className="md:hidden flex gap-1.5 w-full mt-2">
+        <div className="md:hidden flex gap-2 w-full mt-3">
           <button
             id={`btn-add-to-bag-mobile-${product.id}`}
             onClick={(e) => {
@@ -140,10 +140,10 @@ export default function ProductCard({
                 );
               }
             }}
-            className="flex-1 bg-black text-white py-2 px-1 text-[9px] font-bold tracking-wider uppercase rounded-sm flex items-center justify-center gap-1 cursor-pointer shadow-sm active:scale-95 transition-all truncate"
+            className="flex-1 bg-black text-white py-2.5 px-3 text-[10px] font-bold tracking-widest uppercase rounded-sm flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-all"
           >
-            <ShoppingBag size={11} className="shrink-0" />
-            <span className="truncate">Add</span>
+            <ShoppingBag size={12} className="shrink-0" />
+            <span>Add to Bag</span>
           </button>
           <button
             id={`btn-quickview-mobile-${product.id}`}
@@ -151,10 +151,10 @@ export default function ProductCard({
               e.stopPropagation();
               onQuickView(product);
             }}
-            className="flex-1 border border-neutral-300 text-neutral-800 bg-white py-2 px-1 text-[9px] font-bold tracking-wider uppercase rounded-sm flex items-center justify-center gap-1 cursor-pointer hover:border-black active:scale-95 transition-all truncate"
+            className="flex-1 border border-neutral-300 text-neutral-800 bg-white py-2.5 px-3 text-[10px] font-bold tracking-widest uppercase rounded-sm flex items-center justify-center gap-1.5 cursor-pointer hover:border-black active:scale-95 transition-all"
           >
-            <Eye size={11} className="shrink-0" />
-            <span className="truncate">View</span>
+            <Eye size={12} className="shrink-0" />
+            <span>Quick View</span>
           </button>
         </div>
       </div>

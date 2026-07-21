@@ -199,7 +199,7 @@ export default function HomePage({
             <p className="text-sm font-semibold text-neutral-500">No new arrivals found in the database.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 sm:gap-x-6 sm:gap-y-12">
             {newArrivalsProducts.map((product) => (
               <ProductCard
                 key={product.id}

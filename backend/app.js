@@ -28,8 +28,13 @@ const app = express();
 // Security Headers
 app.use(helmet());
 
-// NoSQL Injection Prevention
-app.use(mongoSanitize());
+// NoSQL Injection Prevention (Express 5 compatible in-place sanitization)
+app.use((req, res, next) => {
+  if (req.body) mongoSanitize.sanitize(req.body);
+  if (req.params) mongoSanitize.sanitize(req.params);
+  if (req.query) mongoSanitize.sanitize(req.query);
+  next();
+});
 
 // CORS configuration
 const allowedOrigins = process.env.CLIENT_URL

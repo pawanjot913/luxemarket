@@ -2,14 +2,18 @@ const OpenAI = require("openai");
 const Product = require("../../models/Product");
 
 const getOpenAIClient = () => {
-  const apiKey = process.env.OPENROUTER_API_KEY;
+  const apiKey = (process.env.OPENROUTER_API_KEY || "").trim();
   if (!apiKey) return null;
+
+  const refererUrl = process.env.CLIENT_URL
+    ? process.env.CLIENT_URL.split(",")[0].trim()
+    : "https://luxemarkets.netlify.app";
 
   return new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey,
     defaultHeaders: {
-      "HTTP-Referer": process.env.CLIENT_URL || "https://luxemarkets.netlify.app",
+      "HTTP-Referer": refererUrl,
       "X-Title": "Luxe Market AI Shopping Assistant",
     },
   });
@@ -128,7 +132,7 @@ STRICT RULES:
 
       answer = response.choices[0]?.message?.content || "";
     } catch (err) {
-      console.warn("OpenRouter API call failed, falling back to local recommendation format:", err.message);
+      console.error("OpenRouter API call failed:", err?.response?.data || err?.message || err);
     }
   }
 

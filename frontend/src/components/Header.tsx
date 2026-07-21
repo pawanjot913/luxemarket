@@ -132,6 +132,20 @@ export default function Header({
               </button>
             </div>
 
+            {/* AI Assistant Pill Button */}
+            <button
+              id="header-ai-assistant-btn"
+              onClick={() => {
+                onPageChange('ai-shopping');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="bg-[#2F58CD] hover:bg-blue-700 text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider sm:tracking-widest px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-full flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all cursor-pointer shrink-0"
+              title="AI Shopping Assistant"
+            >
+              <Sparkles size={12} className="animate-pulse" />
+              <span>AI Assistant</span>
+            </button>
+
             {/* Favorites Icon */}
             <button
               id="favorites-drawer-btn"

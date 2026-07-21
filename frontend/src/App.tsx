@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Sparkles } from 'lucide-react';
 
 import Header from './components/Header';
 import CartDrawer from './components/CartDrawer';
@@ -427,6 +428,22 @@ export default function App() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Floating AI Shopping Assistant FAB for all customers */}
+      {currentPage !== 'ai-shopping' && (
+        <button
+          id="floating-ai-assistant-fab"
+          onClick={() => {
+            setCurrentPage('ai-shopping');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 bg-[#2F58CD] hover:bg-blue-700 text-white p-3.5 sm:px-4 sm:py-3 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
+          title="Ask AI Shopping Assistant"
+        >
+          <Sparkles size={18} className="animate-pulse" />
+          <span className="hidden sm:inline text-xs font-extrabold uppercase tracking-wider">AI Assistant</span>
+        </button>
       )}
     </div>
   );

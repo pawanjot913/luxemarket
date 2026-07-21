@@ -87,13 +87,16 @@ const createCoupon = async (req, res) => {
             });
         }
 
+        const sellerId = req.user.role === 'seller' ? req.user.id : (req.body.seller || null);
+
         const coupon = await Coupon.create({
             code: normalizedCode,
             discountType,
             discountValue: parsedDiscountValue,
             minOrderAmount: parsedMinOrderAmount,
             maxDiscount: parsedMaxDiscount,
-            expiryDate: expiry
+            expiryDate: expiry,
+            seller: sellerId
         });
 
         return res.status(201).json({
@@ -129,6 +132,10 @@ const getCoupons = async (req, res) => {
         limit = Math.min(100, Math.max(1, Number(limit)));
 
         const filter = {};
+
+        if (req.user.role === 'seller') {
+            filter.seller = req.user.id;
+        }
 
         if (status === "active") {
             filter.isActive = true;
@@ -175,13 +182,20 @@ const getCouponById = async (req, res) => {
        
 
         const coupon = await Coupon.findById(couponId).select(
-        "code discountType discountValue minOrderAmount maxDiscount expiryDate isActive createdAt"
+        "code discountType discountValue minOrderAmount maxDiscount expiryDate isActive seller createdAt"
     ).lean();
 
         if (!coupon) {
             return res.status(404).json({
                 success: false,
                 message: "Coupon not found."
+            });
+        }
+
+        if (req.user.role === 'seller' && (!coupon.seller || coupon.seller.toString() !== req.user.id)) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: You can only view your own coupons."
             });
         }
 
@@ -211,6 +225,13 @@ const updateCoupon = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 message: "Coupon not found."
+            });
+        }
+
+        if (req.user.role === 'seller' && (!coupon.seller || coupon.seller.toString() !== req.user.id)) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: You can only update your own coupons."
             });
         }
 
@@ -365,6 +386,13 @@ const toggleCouponStatus = async (req, res) => {
             });
         }
 
+        if (req.user.role === 'seller' && (!coupon.seller || coupon.seller.toString() !== req.user.id)) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: You can only modify your own coupons."
+            });
+        }
+
         coupon.isActive = !coupon.isActive;
 
         await coupon.save();
@@ -457,11 +485,30 @@ const applyCoupon = async (req, res) => {
             });
         }
 
+        // Calculate eligible total for seller coupon vs global coupon
+        let eligibleTotal = 0;
+        if (coupon.seller) {
+            for (const item of cart.products) {
+                if (!item.productId) continue;
+                if (item.productId.seller && item.productId.seller.toString() === coupon.seller.toString()) {
+                    eligibleTotal += item.productId.price * item.quantity;
+                }
+            }
+            if (eligibleTotal === 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: "This coupon is not applicable to any products in your cart."
+                });
+            }
+        } else {
+            eligibleTotal = cartTotal;
+        }
+
         // Minimum order validation
-        if (cartTotal < coupon.minOrderAmount) {
+        if (eligibleTotal < coupon.minOrderAmount) {
             return res.status(400).json({
                 success: false,
-                message: `Minimum order amount should be ₹${coupon.minOrderAmount}.`
+                message: `Minimum order amount for eligible products should be ₹${coupon.minOrderAmount}.`
             });
         }
 
@@ -472,7 +519,7 @@ const applyCoupon = async (req, res) => {
             case "percentage":
 
                 discount =
-                    (cartTotal * coupon.discountValue) / 100;
+                    (eligibleTotal * coupon.discountValue) / 100;
 
                 if (coupon.maxDiscount) {
                     discount = Math.min(
@@ -497,8 +544,8 @@ const applyCoupon = async (req, res) => {
                 });
         }
 
-        // Discount cannot exceed cart total
-        discount = Math.min(discount, cartTotal);
+        // Discount cannot exceed eligible total
+        discount = Math.min(discount, eligibleTotal);
 
         // Round values
         discount = Math.round(discount * 100) / 100;
@@ -587,13 +634,20 @@ const removeCoupon = async (req, res) => {
 const deleteCoupon = async (req, res) => {
     try {
         const { couponId } = req.params;
-        const coupon = await Coupon.findByIdAndDelete(couponId);
+        const coupon = await Coupon.findById(couponId);
         if (!coupon) {
             return res.status(404).json({
                 success: false,
                 message: "Coupon not found."
             });
         }
+        if (req.user.role === 'seller' && (!coupon.seller || coupon.seller.toString() !== req.user.id)) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: You can only delete your own coupons."
+            });
+        }
+        await Coupon.findByIdAndDelete(couponId);
         return res.status(200).json({
             success: true,
             message: "Coupon deleted successfully."

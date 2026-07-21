@@ -69,7 +69,7 @@ export default function AdminSidebar({
               { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
               { id: 'inventory', label: 'Inventory', icon: Boxes },
               { id: 'orders', label: 'Orders', icon: ShoppingCart },
-              ...(adminUser?.role === 'admin' ? [
+              ...((adminUser?.role === 'admin' || adminUser?.role === 'seller') ? [
                 { id: 'discounts', label: 'Discounts', icon: Tag }
               ] : []),
               { id: 'analytics', label: 'Analytics', icon: BarChart3 },

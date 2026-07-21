@@ -448,7 +448,7 @@ export default function AdminPage({ authToken, triggerNotification }: AdminPageP
             />
           )}
 
-          {activeTab === 'discounts' && adminUser?.role === 'admin' && (
+          {activeTab === 'discounts' && (adminUser?.role === 'admin' || adminUser?.role === 'seller') && (
             <DiscountsTab
               coupons={couponsList}
               isLoading={isLoadingCoupons}

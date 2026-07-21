@@ -1,6 +1,6 @@
 const Coupon = require("../../models/Coupon");
 
-const calculateDiscount = async (cartTotal, couponId, session = null) => {
+const calculateDiscount = async (cartTotal, couponId, session = null, cart = null) => {
 
     // No coupon applied
     if (!couponId) {
@@ -32,10 +32,25 @@ const calculateDiscount = async (cartTotal, couponId, session = null) => {
         throw new Error("Coupon has expired");
     }
 
+    let eligibleTotal = 0;
+    if (coupon.seller && cart && cart.products) {
+        for (const item of cart.products) {
+            if (!item.productId) continue;
+            if (item.productId.seller && item.productId.seller.toString() === coupon.seller.toString()) {
+                eligibleTotal += item.productId.price * item.quantity;
+            }
+        }
+        if (eligibleTotal === 0) {
+            throw new Error("Coupon is not applicable to any products in your cart");
+        }
+    } else {
+        eligibleTotal = cartTotal;
+    }
+
     // Minimum order amount
-    if (cartTotal < coupon.minOrderAmount) {
+    if (eligibleTotal < coupon.minOrderAmount) {
         throw new Error(
-            `Minimum order amount is ₹${coupon.minOrderAmount}`
+            `Minimum order amount for eligible products is ₹${coupon.minOrderAmount}`
         );
     }
 
@@ -46,7 +61,7 @@ const calculateDiscount = async (cartTotal, couponId, session = null) => {
         case "percentage":
 
             discount =
-                (cartTotal * coupon.discountValue) / 100;
+                (eligibleTotal * coupon.discountValue) / 100;
 
             if (coupon.maxDiscount) {
                 discount = Math.min(
@@ -68,11 +83,11 @@ const calculateDiscount = async (cartTotal, couponId, session = null) => {
             throw new Error("Invalid coupon type");
     }
 
-    discount = Math.min(discount, cartTotal);
+    discount = Math.min(discount, eligibleTotal);
 
-    discount = Math.round(discount);
+    discount = Math.round(discount * 100) / 100;
 
-    const finalAmount = Math.round(cartTotal - discount);
+    const finalAmount = Math.round((cartTotal - discount) * 100) / 100;
 
     return {
         coupon,

@@ -29,7 +29,8 @@ const {
 } = await calculateDiscount(
     cartTotal,
     cart.coupon,
-    session
+    session,
+    cart
 );
 
         const order = await checkoutService({

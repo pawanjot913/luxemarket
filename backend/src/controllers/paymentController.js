@@ -34,7 +34,9 @@ const createPaymentOrder = async (req, res) => {
         const { discount, finalAmount } =
             await calculateDiscount(
                 cartTotal,
-                cart.coupon
+                cart.coupon,
+                null,
+                cart
             );
 
         // Generate unique payment order id

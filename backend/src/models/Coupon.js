@@ -40,6 +40,12 @@ const couponSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+
+    seller: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
     }
 
 }, {

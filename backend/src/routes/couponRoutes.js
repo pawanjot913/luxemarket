@@ -13,35 +13,35 @@ const {
     deleteCoupon
 } = require("../controllers/couponController");
 
-const { authMiddleware, adminMiddleware } = require("../middleware/authMiddleware");
+const { authMiddleware, adminOrSellerMiddleware } = require("../middleware/authMiddleware");
 
-router.post("/admin/coupons", authMiddleware, adminMiddleware, createCoupon);
-router.get("/admin/coupons", authMiddleware, adminMiddleware, getCoupons);
+router.post("/admin/coupons", authMiddleware, adminOrSellerMiddleware, createCoupon);
+router.get("/admin/coupons", authMiddleware, adminOrSellerMiddleware, getCoupons);
 router.get(
     "/admin/coupons/:couponId",
     authMiddleware,
-    adminMiddleware,
+    adminOrSellerMiddleware,
     validateObjectId("couponId"),
     getCouponById
 );
 router.put(
     "/admin/coupons/:couponId",
     authMiddleware,
-    adminMiddleware,
+    adminOrSellerMiddleware,
     validateObjectId("couponId"),
     updateCoupon
 );
 router.delete(
     "/admin/coupons/:couponId",
     authMiddleware,
-    adminMiddleware,
+    adminOrSellerMiddleware,
     validateObjectId("couponId"),
     deleteCoupon
 );
 router.patch(
     "/admin/coupons/:couponId/toggle-status",
     authMiddleware,
-    adminMiddleware,
+    adminOrSellerMiddleware,
     validateObjectId("couponId"),
     toggleCouponStatus
 );

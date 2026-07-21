@@ -26,6 +26,9 @@ if (!process.env.JWT_SECRET) {
 
 const app = express();
 
+// Trust proxy for rate-limiting behind reverse proxies (Render, Cloudflare, Heroku)
+app.set("trust proxy", 1);
+
 // Security Headers
 app.use(helmet());
 

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { Product, Color } from '../types';
 
@@ -67,17 +67,19 @@ export default function CatalogPage({
   setCurrentPageNum,
   hasMoreProducts
 }: CatalogPageProps) {
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
   return (
-    <section className="py-12 max-w-7xl mx-auto px-6 md:px-16">
+    <section className="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6 md:px-16">
       
       {/* Page Header */}
-      <div className="text-left mb-8">
+      <div className="text-left mb-6 sm:mb-8">
         <div className="text-xs text-neutral-400 flex items-center gap-2 mb-2 font-medium tracking-wider uppercase">
           <button onClick={() => { setCurrentPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-black cursor-pointer">Home</button>
           <span>/</span>
           <span className="text-black font-semibold uppercase">{currentPage}</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight">
           {currentPage === 'collections' && 'All Collections'}
           {currentPage === 'men' && "Men's Collection"}
           {currentPage === 'women' && "Women's Collection"}
@@ -88,11 +90,31 @@ export default function CatalogPage({
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-10">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
         
+        {/* Mobile Filter Toggle Button */}
+        <div className="lg:hidden flex justify-between items-center bg-neutral-50 p-4 rounded-md border border-neutral-200">
+          <button
+            onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+            className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-black cursor-pointer"
+          >
+            <SlidersHorizontal size={16} />
+            <span>Filter Parameters</span>
+            <ChevronDown size={16} className={`transition-transform duration-300 ${isMobileFiltersOpen ? 'rotate-180' : ''}`} />
+          </button>
+          <button
+            onClick={handleClearAllFilters}
+            className="text-neutral-400 hover:text-black text-xs font-semibold uppercase tracking-widest transition-colors cursor-pointer"
+          >
+            Clear All
+          </button>
+        </div>
+
         {/* Filter Area (Left Column) */}
-        <aside className="w-full lg:w-64 shrink-0 text-left space-y-8 pr-6 lg:border-r lg:border-neutral-100">
-          <div className="flex justify-between items-center pb-4 border-b border-neutral-100">
+        <aside className={`w-full lg:w-64 shrink-0 text-left space-y-8 pr-0 lg:pr-6 lg:border-r lg:border-neutral-100 ${
+          isMobileFiltersOpen ? 'block bg-white p-6 rounded-md border border-neutral-200 shadow-sm' : 'hidden lg:block'
+        }`}>
+          <div className="hidden lg:flex justify-between items-center pb-4 border-b border-neutral-100">
             <h3 className="font-bold text-lg text-black uppercase tracking-wider">Filters</h3>
             <button
               onClick={handleClearAllFilters}

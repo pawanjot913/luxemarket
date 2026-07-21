@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Send, Bot, User, Sparkles, RefreshCw, ArrowRight, Star, ShoppingBag, ExternalLink } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { Send, Bot, User, Sparkles, RefreshCw, Star, ExternalLink } from 'lucide-react';
 import { Product } from '../types';
 import { askAiShoppingAssistant } from '../api';
 

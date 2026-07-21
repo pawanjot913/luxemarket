@@ -16,6 +16,7 @@ import ProductDetailsPageWrapper from './pages/ProductDetailsPageWrapper';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import AdminPage from './pages/AdminPage';
+import AiShoppingPage from './pages/AiShoppingPage';
 
 import { useAuth } from './hooks/useAuth';
 import { useCart } from './hooks/useCart';
@@ -56,6 +57,7 @@ export default function App() {
     if (path === '/login') return 'login';
     if (path === '/signup') return 'signup';
     if (path === '/admin') return 'admin';
+    if (path === '/ai-shopping') return 'ai-shopping';
     return 'home';
   }, [location.pathname]);
 
@@ -358,6 +360,8 @@ export default function App() {
               <Navigate to="/" replace />
             )
           } />
+
+          <Route path="/ai-shopping" element={<AiShoppingPage />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

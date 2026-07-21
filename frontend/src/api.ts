@@ -389,3 +389,22 @@ export async function toggleAdminCouponStatus(couponId: string, token: string) {
   return data;
 }
 
+export async function askAiShoppingAssistant(message: string) {
+  const response = await fetch(`${API_BASE_URL}/api/ai/shopping-assistant`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ message }),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to get recommendations from AI Assistant');
+  }
+  return data as {
+    success: boolean;
+    answer: string;
+    products: Product[];
+  };
+}
+

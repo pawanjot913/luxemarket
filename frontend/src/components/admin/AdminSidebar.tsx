@@ -7,7 +7,8 @@ import {
   Settings,
   X,
   ExternalLink,
-  Tag
+  Tag,
+  Sparkles
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -117,6 +118,16 @@ export default function AdminSidebar({
               </span>
             </div>
           </div>
+
+          <button
+            onClick={() => {
+              window.location.href = '/ai-shopping';
+            }}
+            className="w-full bg-[#2F58CD] hover:bg-blue-700 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-sm"
+          >
+            <Sparkles size={12} />
+            <span>AI Assistant</span>
+          </button>
 
           <button
             onClick={onViewStorefront}

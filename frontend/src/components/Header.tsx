@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Heart, ShoppingBag, User, X } from 'lucide-react';
+import { Search, Heart, ShoppingBag, User, X, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface HeaderProps {
@@ -36,7 +36,8 @@ export default function Header({
     { label: 'Collections', page: 'collections' as const },
     { label: 'Men', page: 'men' as const },
     { label: 'Women', page: 'women' as const },
-    { label: 'Accessories', page: 'accessories' as const }
+    { label: 'Accessories', page: 'accessories' as const },
+    { label: 'AI Assistant', page: 'ai-shopping' as const, isAi: true }
   ];
 
   return (
@@ -209,7 +210,8 @@ export default function Header({
           { label: 'Collections', page: 'collections' as const },
           { label: 'Men', page: 'men' as const },
           { label: 'Women', page: 'women' as const },
-          { label: 'Accessories', page: 'accessories' as const }
+          { label: 'Accessories', page: 'accessories' as const },
+          { label: 'AI Assistant', page: 'ai-shopping' as const }
         ].map((item) => {
           const isActive = currentPage === item.page;
           return (

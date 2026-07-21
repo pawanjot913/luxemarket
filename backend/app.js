@@ -15,6 +15,7 @@ const couponRoutes = require("./src/routes/couponRoutes");
 const paymentRoutes = require("./src/routes/paymentRoutes");
 const userRoutes = require("./src/routes/userRoutes");
 const reviewRoutes = require("./src/routes/reviewRouts");
+const aiRoutes = require("./src/modules/ai/ai.routes");
 const errorMiddleware = require("./src/middleware/errorMiddleware");
 
 // Ensure required environment variables exist
@@ -95,6 +96,7 @@ app.use("/api", couponRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api", reviewRoutes);
+app.use("/api/ai", aiRoutes);
 
 // Global Error Handler
 app.use(errorMiddleware);

@@ -389,7 +389,13 @@ export async function toggleAdminCouponStatus(couponId: string, token: string) {
   return data;
 }
 
-export async function askAiShoppingAssistant(message: string) {
+export interface AiShoppingResponse {
+  success: boolean;
+  answer: string;
+  products: Product[];
+}
+
+export async function askAiShoppingAssistant(message: string): Promise<AiShoppingResponse> {
   const response = await fetch(`${API_BASE_URL}/api/ai/shopping-assistant`, {
     method: 'POST',
     headers: {
@@ -401,10 +407,6 @@ export async function askAiShoppingAssistant(message: string) {
   if (!response.ok) {
     throw new Error(data.message || 'Failed to get recommendations from AI Assistant');
   }
-  return data as {
-    success: boolean;
-    answer: string;
-    products: Product[];
-  };
+  return data as AiShoppingResponse;
 }
 

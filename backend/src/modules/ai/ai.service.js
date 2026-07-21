@@ -123,6 +123,7 @@ STRICT RULES:
           { role: "user", content: message },
         ],
         temperature: 0.3,
+        max_tokens: 1000,
       });
 
       answer = response.choices[0]?.message?.content || "";

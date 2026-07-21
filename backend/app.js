@@ -38,14 +38,25 @@ app.use((req, res, next) => {
 });
 
 // CORS configuration
-const allowedOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(",")
-  : ["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"];
+const defaultOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "http://127.0.0.1:5173",
+  "https://luxemarket-three.vercel.app",
+  "https://luxemarkets.netlify.app",
+];
+
+const envOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(",").map((url) => url.trim().replace(/\/$/, ""))
+  : [];
+
+const allowedOrigins = Array.from(new Set([...defaultOrigins.map((url) => url.replace(/\/$/, "")), ...envOrigins]));
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      const cleanOrigin = origin ? origin.replace(/\/$/, "") : null;
+      if (!cleanOrigin || allowedOrigins.includes(cleanOrigin)) {
         return callback(null, true);
       }
       return callback(new Error("CORS policy violation: Access denied."));

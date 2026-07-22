@@ -22,7 +22,7 @@ const SAMPLE_PROMPTS = [
 export default function AiShoppingPage() {
   const navigate = useNavigate();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
+
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome-msg',
@@ -61,7 +61,7 @@ export default function AiShoppingPage() {
     setIsLoading(true);
 
     try {
-      const response = await askAiShoppingAssistant(query);
+      const response = (await askAiShoppingAssistant(query)) as unknown as { answer: string; products: Product[] };
       const aiMsg: ChatMessage = {
         id: `ai-${Date.now()}`,
         sender: 'ai',
@@ -90,7 +90,7 @@ export default function AiShoppingPage() {
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#1A1D20] py-8 sm:py-12 px-4 sm:px-6 md:px-16 flex flex-col items-center">
       <div className="max-w-4xl w-full flex flex-col h-[85vh] bg-white border border-[#E9ECEF] rounded-lg shadow-xl overflow-hidden text-left">
-        
+
         {/* Header Bar */}
         <div className="bg-black text-white px-6 py-4 flex items-center justify-between border-b border-neutral-800 shrink-0">
           <div className="flex items-center gap-3">
@@ -106,7 +106,7 @@ export default function AiShoppingPage() {
               </span>
             </div>
           </div>
-          
+
           <button
             onClick={() => setMessages([messages[0]])}
             className="text-[10px] text-neutral-400 hover:text-white uppercase tracking-widest font-bold border border-neutral-800 px-3 py-1.5 rounded-sm transition-colors cursor-pointer"
@@ -117,7 +117,7 @@ export default function AiShoppingPage() {
 
         {/* Messages Body Area */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 bg-[#F8F9FA]/50">
-          
+
           {/* Quick Prompts Pills */}
           {messages.length <= 1 && (
             <div className="mb-6 bg-white p-4 rounded-md border border-neutral-200 shadow-xs space-y-3">
@@ -145,25 +145,22 @@ export default function AiShoppingPage() {
               className={`flex gap-3 max-w-3xl ${msg.sender === 'user' ? 'ml-auto flex-row-reverse' : ''}`}
             >
               {/* Avatar */}
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${
-                msg.sender === 'user' ? 'bg-black text-white' : 'bg-[#2F58CD] text-white'
-              }`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${msg.sender === 'user' ? 'bg-black text-white' : 'bg-[#2F58CD] text-white'
+                }`}>
                 {msg.sender === 'user' ? <User size={14} /> : <Bot size={14} />}
               </div>
 
               {/* Message Content Bubble */}
               <div className={`space-y-4 max-w-[88%] sm:max-w-[80%]`}>
-                <div className={`p-4 rounded-md text-xs sm:text-sm leading-relaxed ${
-                  msg.sender === 'user'
-                    ? 'bg-black text-white font-medium rounded-tr-none'
-                    : 'bg-white border border-[#E9ECEF] text-neutral-800 shadow-xs rounded-tl-none font-normal'
-                }`}>
+                <div className={`p-4 rounded-md text-xs sm:text-sm leading-relaxed ${msg.sender === 'user'
+                  ? 'bg-black text-white font-medium rounded-tr-none'
+                  : 'bg-white border border-[#E9ECEF] text-neutral-800 shadow-xs rounded-tl-none font-normal'
+                  }`}>
                   <div className="whitespace-pre-wrap font-sans">
                     {msg.text}
                   </div>
-                  <span className={`text-[9px] block mt-2 text-right font-medium ${
-                    msg.sender === 'user' ? 'text-neutral-400' : 'text-neutral-400'
-                  }`}>
+                  <span className={`text-[9px] block mt-2 text-right font-medium ${msg.sender === 'user' ? 'text-neutral-400' : 'text-neutral-400'
+                    }`}>
                     {msg.timestamp}
                   </span>
                 </div>

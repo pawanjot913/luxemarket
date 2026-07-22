@@ -139,7 +139,7 @@ export default function Header({
                 onPageChange('ai-shopping');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="bg-[#2F58CD] hover:bg-blue-700 text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider sm:tracking-widest px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-full flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all cursor-pointer shrink-0"
+              className="hidden md:flex bg-[#2F58CD] hover:bg-blue-700 text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider sm:tracking-widest px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-full items-center gap-1 sm:gap-1.5 shadow-sm transition-all cursor-pointer shrink-0"
               title="AI Shopping Assistant"
             >
               <Sparkles size={12} className="animate-pulse" />
@@ -224,8 +224,7 @@ export default function Header({
           { label: 'Collections', page: 'collections' as const },
           { label: 'Men', page: 'men' as const },
           { label: 'Women', page: 'women' as const },
-          { label: 'Accessories', page: 'accessories' as const },
-          { label: 'AI Assistant', page: 'ai-shopping' as const }
+          { label: 'Accessories', page: 'accessories' as const }
         ].map((item) => {
           const isActive = currentPage === item.page;
           return (
